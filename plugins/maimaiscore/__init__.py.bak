@@ -1,0 +1,96 @@
+import os
+import random
+import wave
+import contextlib
+from nonebot.adapters.onebot.v11 import MessageSegment
+from nonebot import on_command
+from nonebot.adapters import Message
+from nonebot.params import CommandArg
+from nonebot.params import ArgPlainText
+from nonebot.rule import to_me
+from nonebot.adapters.onebot.v11.permission import GROUP_MEMBER,PRIVATE,GROUP
+
+guess = on_command("舞萌分数", block=True, permission=GROUP_MEMBER|PRIVATE|GROUP)
+
+@guess.handle()
+async def handle_function():  
+    await guess.send(f"请输入定数和分数（中间用空格分开，不加百分号），如“13.4 100.45”")
+
+@guess.got("sel")
+async def got_sel(sel: str = ArgPlainText()):
+    parts = sel.split()
+    if len(parts) == 2:
+        a = float(parts[0])
+        b = float(parts[1])
+        if a > 15:
+            await guess.finish(f"捏妈的，你是想打爆舞萌吗？")
+        elif a < 1 or b < 0:
+            await guess.finish(f"捏妈的，华立欠你钱了？")
+        if b >= 100.5:
+            if b > 101:
+                await guess.finish(f"大于101？你是把滴蜡熊打爆了吗？")
+            else:
+                result = a*100.5*22.4/100
+                if b > 100.99999:
+                    result = str(result) +"我超！101！AP+大神啊！"
+                elif b >= 100.9:
+                    result = str(result) + "，哇，你一定AP了吧！这个成绩太帅啦！新大神降临~！"
+                else:
+                    result = str(result) + "，这个成绩太帅啦！新大神降临~！" 
+        elif b >= 100:
+            result = a*b*21.6/100
+            if b >= 100.4:
+                result = str(result) + "，哇，我好崇拜你呀！差一点就鸟加啦！加油~！"
+            else:
+                result = str(result) + "，哇，我好崇拜你呀！"
+        elif b >= 99.5:
+            result = a*b*21.1/100
+            result = str(result) + "，哇，太厉害啦，下一次一定可以鸟哦~！"
+        elif b >= 99:
+            result = a*b*20.8/100
+            result = str(result) + "，好厉害o(≧v≦)o~~~，下一次一定可以鸟哦~！"
+        elif b >= 98:
+            result = a*b*20.3/100
+            result = str(result) + "，差一点就到99咯，加油哦~！"
+        elif b >= 97:
+            result = a*b*20/100
+            result = str(result) + "，差一点就到98咯，加油哦~！"
+        elif b >= 94:
+            result = a*b*16.8/100
+            result = str(result) + "，差一点就S咯，加油哦~！"
+        elif b >= 90:
+            result = a*b*13.6/100
+            result = str(result) + "，不要越级啦~！建议打一打稍微简单的曲子哦~！"
+        elif b >= 80:
+            result = a*b*12.8/100
+            result = str(result) + "，你看看你打的什么东西！不要越级哦~！建议打一打稍微简单的曲子捏~！"
+        elif b >= 75:
+            result = a*b*12/100
+            result = str(result) + "，你看看你打的什么东西！不要越级哦~！建议打一打稍微简单的曲子捏~！"
+        elif b >= 70:
+            result = a*b*11.2/100
+            result = str(result) + "，你看看你打的什么东西！不要越级哦~！建议打一打稍微简单的曲子捏~！"
+        elif b >= 60:
+            result = a*b*9.6/100
+            result = str(result) + "，你看看你打的什么东西！不要越级哦~！建议打一打稍微简单的曲子捏~！"
+        elif b >= 50:
+            result = a*b*8/100
+            result = str(result) + "，你看看你打的什么东西！不要越级哦~！建议打一打稍微简单的曲子捏~！"
+        elif b >= 40:
+            result = a*b*6.4/100
+            result = str(result) + "，你看看你打的什么东西！不要越级哦~！建议打一打稍微简单的曲子捏~！"
+        elif b >= 30:
+            result = a*b*4.8/100
+            result = str(result) + "，你看看你打的什么东西！不要越级哦~！建议打一打稍微简单的曲子捏~！"
+        elif b >= 20:
+            result = a*b*3.2/100
+            result = str(result) + "，你看看你打的什么东西！不要越级哦~！建议打一打稍微简单的曲子捏~！"
+        elif b >= 10:
+            result = a*b*1.6/100
+            result = str(result) + "，你看看你打的什么东西！不要越级哦~！建议打一打稍微简单的曲子捏~！"
+        else:
+            result = 0
+            result = str(result) + "，你看看你打的什么东西！不要越级哦~！"
+        await guess.finish(f"该曲目的分数为"+str(result))
+    else:
+        await guess.reject(f"输入格式错误，请重新输入")
